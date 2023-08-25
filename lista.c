@@ -2,8 +2,11 @@
 #include "./lista.h"
 
 void pegaInputUsuario();
+void consultaLista();
+void insereItem();
+void removeItem();
 bool validaInput();
-bool incluiItem();
+bool podeInserirItem();
 
 Item lista[20];
 int usu_i, usu_cod, item_qt;
@@ -19,24 +22,38 @@ void pegaInputUsuario() {
     while(true) {
         scanf("%d", &usu_i);
 
-        if(!validaInput())
-            continue;
-
-        if(!incluiItem())
-            printf("Lista cheia.\n");
-        else
-            printf("Item incluído na lista.\n");
+        switch(usu_i) {
+            case 1:
+                consultaLista();
+                break;
+            case 2:
+                insereItem();
+                break;
+            case 3:
+                removeItem();
+                break;
+            default:
+                ;
+        }
     }
 }
 
-bool validaInput() {
-    return usu_i >= 0 && usu_i <= 19;
+void consultaLista() {
+
 }
 
-bool incluiItem() {
-    if(item_qt >= 2) return false;
+void insereItem() {
 
-    item_qt++;
+}
 
+void removeItem() {
+
+}
+
+bool validaInput() {
+    return usu_i >= MIN_ITEMS && usu_i <= MAX_ITEMS;
+}
+
+bool podeInserirItem() {
     return true;
 }

@@ -3,7 +3,8 @@
 
 #include <stdbool.h>
 
-#define MAX_LEN 3
+#define MIN_ITEMS 0
+#define MAX_ITEMS 14
 
 typedef struct Lista
 {
