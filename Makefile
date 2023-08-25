@@ -3,9 +3,9 @@ all:
 
 .PHONY run:
 run:
-	./main
+	./lista
 
 .PHONY clean:
 clean:
-	rm -f main
+	rm -f lista
 	clear
