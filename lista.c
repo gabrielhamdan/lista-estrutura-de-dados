@@ -1,59 +1,119 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "./lista.h"
 
-void pegaInputUsuario();
-void consultaLista();
-void insereItem();
-void removeItem();
-bool validaInput();
-bool podeInserirItem();
+void imprime_menu(bool);
+void pega_input_usuario();
+void consulta_lista();
+void insere_item();
+void remove_item();
+void reorganiza_lista(int);
+bool valida_item(int);
+bool pode_inserir_item();
+void exibe_mensagem(int);
+void flush_stdin();
 
-Item lista[20];
+Item lista[MAX_ITEMS];
 int usu_i, usu_cod, item_qt;
 
 int main(int argc, char **argv) {
     usu_i = usu_cod = item_qt = 0;
-    pegaInputUsuario();
+    imprime_menu(false);
 
     return 0;
 }
 
-void pegaInputUsuario() {
-    while(true) {
-        scanf("%d", &usu_i);
+void imprime_menu(bool op_invalida) {
+    system("clear");
 
-        switch(usu_i) {
-            case 1:
-                consultaLista();
-                break;
-            case 2:
-                insereItem();
-                break;
-            case 3:
-                removeItem();
-                break;
-            default:
-                ;
-        }
+    printf("===================\n");
+    printf("       LISTA       \n");
+    printf("===================\n");
+    printf(" 1 consultar lista \n");
+    printf(" 2 inserir item    \n");
+    printf(" 3 remover item    \n");
+    if(op_invalida)
+        printf("= opção  inválida =\n");
+    else
+        printf("===================\n");
+    
+    pega_input_usuario();
+}
+
+void pega_input_usuario() {
+    scanf("%d", &usu_i);
+    flush_stdin();
+
+    switch(usu_i) {
+        case CONSULTA_LISTA:
+            consulta_lista();
+            break;
+        case INSERE_ITEM:
+            insere_item();
+            break;
+        case REMOVE_ITEM:
+            remove_item();
+            break;
+        default:
+            imprime_menu(true);
     }
 }
 
-void consultaLista() {
+void consulta_lista() {
+    if(item_qt == 0)
+        exibe_mensagem(LISTA_VAZIA);
+    
+    system("clear");
+
+    // itera lista e imprime o que estiver em_uso
+
+    printf("Pressione qualquer tecla para retornar ao menu principal.");
+    flush_stdin(); // aguarda qualquer input do usuário antes de seguir executando o código
+
+    imprime_menu(false);
+}
+
+void insere_item() {
+    
+}
+
+void remove_item() {
+    system("clear");
+
+    int item;
+    printf("Informe qual item deseja remover: ");
+    scanf("%d", &item);
+
+    if(!valida_item(item))
+        exibe_mensagem(ITEM_INVALIDO);
+
+    lista[item].em_uso = false;
+    item_qt--;
+
+    reorganiza_lista(item);
+}
+
+void reorganiza_lista(int item) {
 
 }
 
-void insereItem() {
-
+bool valida_item(int item) {
+    return item >= MIN_ITEMS && item <= MAX_ITEMS;
 }
 
-void removeItem() {
-
+bool pode_inserir_item() {
+    return item_qt < MAX_ITEMS;
 }
 
-bool validaInput() {
-    return usu_i >= MIN_ITEMS && usu_i <= MAX_ITEMS;
+void exibe_mensagem(int cod_msg) {
+    system("clear");
+    printf("%s\n", MENSAGEM[cod_msg]);
+    sleep(1.5);
+    imprime_menu(false);
 }
 
-bool podeInserirItem() {
-    return true;
+void flush_stdin() {
+    char c;
+    while ((c = getchar()) != '\n' && c != EOF);
 }
