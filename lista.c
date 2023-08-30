@@ -77,7 +77,7 @@ void consulta_lista() {
 }
 
 void insere_item() {
-    int num, pos, i, j ;
+    int num, pos;
     printf("Informe o número a ser inserido. ");
     scanf("%d", &num);
     printf("\nInforme a posição a inserir o número: ");
@@ -85,17 +85,17 @@ void insere_item() {
 
     if(pode_inserir_item()){
         if(!lista[pos].em_uso){
-            for(j=0;j<MAX_ITEMS;j++){
+            for(int j=0;j<MAX_ITEMS;j++){
                 if(!lista[j].em_uso){
                     lista[j].cod=num;
-                    lista[j].em_uso=true;
+                    lista[j].em_uso=1;
                     item_qt+=1;
                     break;
                 }
             }
 
-        }else{ //está apenas substituindo valor.... corrigir
-            for(i=MAX_ITEMS;i<=pos+1;i--){
+        }else{
+            for(int i=MAX_ITEMS;i>=(pos+1);i--){
                 if(lista[i-1].em_uso){
                 lista[i].cod = lista[i-1].cod;
                 lista[i].em_uso=true;
@@ -110,6 +110,7 @@ void insere_item() {
     exibe_valores(0, false);
     exibe_uso(2, true);
     imprime_menu(false);
+
 }
 
 void remove_item() {
