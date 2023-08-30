@@ -61,8 +61,11 @@ void pega_input_usuario() {
 }
 
 void consulta_lista() {
-    if(item_qt == 0)
-        exibe_mensagem(LISTA_VAZIA);
+    if(item_qt == 0) {
+        exibe_mensagem(LISTA_VAZIA
+        );
+        return;
+    }
     
     system("clear");
 
