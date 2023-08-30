@@ -64,8 +64,7 @@ void pega_input_usuario() {
 
 void consulta_lista() {
     if(item_qt == 0) {
-        exibe_mensagem(LISTA_VAZIA
-        );
+        exibe_mensagem(LISTA_VAZIA);
         return;
     }
     
@@ -119,20 +118,30 @@ void insere_item() {
 void remove_item() {
     system("clear");
 
-    int item;
+    int pos;
     printf("Informe qual item deseja remover: ");
-    scanf("%d", &item);
+    scanf("%d", &pos);
 
-    if(!valida_item(item))
+    if(!valida_item(pos))
         exibe_mensagem(ITEM_INVALIDO);
 
-    lista[item].em_uso = false;
+    //lista[pos].em_uso = false; // desta forma irá ignorar se a lista foi reordenada.
     item_qt--;
 
-    reorganiza_lista(item);
+    reorganiza_lista(pos);
+    lista[item_qt].em_uso = false; // dessa forma ele irá atribuir vacância no último item da lista após reorg.
+
+    exibe_valores(0, false);
+    exibe_uso(2, true);
+    imprime_menu(false);
 }
 
-void reorganiza_lista(int item) {
+void reorganiza_lista(int pos) {
+    for(int i = pos; i<MAX_ITEMS; i++){
+        if(lista[pos+1].em_uso){
+            lista[pos].cod = lista[pos+1].cod;
+        }
+    }
 
 }
 
