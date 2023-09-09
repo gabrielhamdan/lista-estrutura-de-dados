@@ -13,6 +13,8 @@ bool valida_item(int);
 bool pode_inserir_item();
 void exibe_mensagem(int);
 void flush_stdin();
+void exibe_valores(int, bool);
+void exibe_uso(int, bool);
 
 Item lista[MAX_ITEMS];
 int usu_i, usu_cod, item_qt;
@@ -77,7 +79,40 @@ void consulta_lista() {
 }
 
 void insere_item() {
-    
+    int num, pos;
+    printf("Informe o número a ser inserido. ");
+    scanf("%d", &num);
+    printf("\nInforme a posição a inserir o número: ");
+    scanf("%d", &pos);
+
+    if(pode_inserir_item()){
+        if(!lista[pos].em_uso){
+            for(int j=0;j<MAX_ITEMS;j++){
+                if(!lista[j].em_uso){
+                    lista[j].cod=num;
+                    lista[j].em_uso=1;
+                    item_qt+=1;
+                    break;
+                }
+            }
+
+        }else{
+            for(int i=MAX_ITEMS;i>=(pos+1);i--){
+                if(lista[i-1].em_uso){
+                lista[i].cod = lista[i-1].cod;
+                lista[i].em_uso=true;
+                }
+            }
+            lista[pos].cod=num;
+            item_qt+=1;
+        }
+        }else{
+            exibe_mensagem(LISTA_CHEIA);
+        }
+    exibe_valores(0, false);
+    exibe_uso(2, true);
+    imprime_menu(false);
+
 }
 
 void remove_item() {
@@ -118,4 +153,29 @@ void exibe_mensagem(int cod_msg) {
 void flush_stdin() {
     char c;
     while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void exibe_valores(int duration, bool clear) {
+    int i;
+    for(i=MIN_ITEMS;i<MAX_ITEMS;i++){
+        printf("%d ", lista[i].cod);
+    }
+    printf("\n");
+    sleep(duration);
+    if(clear){
+    system("clear");
+    }
+}
+
+
+void exibe_uso(int duration, bool clear) {
+    int i;
+    for(i=MIN_ITEMS;i<MAX_ITEMS;i++){
+        printf("%d ", lista[i].em_uso);
+    }
+    printf("\n");
+    sleep(duration);
+    if(clear){
+    system("clear");
+    }
 }
