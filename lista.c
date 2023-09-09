@@ -5,9 +5,10 @@
 
 void imprime_menu(bool);
 void pega_input_usuario();
-void consulta_lista();
+void consulta_lista(bool);
 void insere_item();
 void remove_item();
+void exibe_mensagem(int);
 void reorganiza_lista(int);
 bool valida_item(int);
 bool pode_inserir_item();
@@ -32,9 +33,10 @@ void imprime_menu(bool op_invalida) {
     printf("===================\n");
     printf("       LISTA       \n");
     printf("===================\n");
-    printf(" 1 consultar lista \n");
-    printf(" 2 inserir item    \n");
-    printf(" 3 remover item    \n");
+    printf(" 1. consultar lista\n");
+    printf(" 2. inserir item   \n");
+    printf(" 3. remover item   \n");
+    printf(" 4. sair           \n");
     if(op_invalida)
         printf("= opção  inválida =\n");
     else
@@ -49,7 +51,7 @@ void pega_input_usuario() {
 
     switch(usu_i) {
         case CONSULTA_LISTA:
-            consulta_lista();
+            consulta_lista(true);
             break;
         case INSERE_ITEM:
             insere_item();
@@ -57,17 +59,27 @@ void pega_input_usuario() {
         case REMOVE_ITEM:
             remove_item();
             break;
+        case SAIR:
+            system("clear");
+            exit(EXIT_SUCCESS);
         default:
             imprime_menu(true);
     }
 }
 
-void consulta_lista() {
+void consulta_lista(bool retornaMenu) {
     if(!lista_tem_item()) return;
     
     system("clear");
 
-    // itera lista e imprime o que estiver em_uso
+    printf("===================\n");
+    printf("       LISTA       \n");
+    printf("===================\n");
+    for(int i = 0; i < MAX_ITEMS; i++)
+        if(lista[i].em_uso)
+            printf("%d. %d\n", i, lista[i].cod);
+
+    if(!retornaMenu) return;
 
     printf("Pressione ENTER para retornar ao menu principal.");
     flush_stdin(); // aguarda input do usuário antes de seguir executando o código
@@ -78,10 +90,7 @@ void consulta_lista() {
 void insere_item() {
     system("clear");
 
-    if(!pode_inserir_item()) {
-        exibe_mensagem(LISTA_CHEIA);
-        return;
-    }
+    if(!pode_inserir_item()) return;
 
     int num, pos;
 
@@ -91,14 +100,25 @@ void insere_item() {
     printf("\nInforme a posição a inserir o número: ");
     scanf("%d", &pos);
 
-    for(int i = 0; i < MAX_ITEMS; i++) {
-        if(!lista[i].em_uso) {
-            lista[i].cod = num;
-            lista[i].em_uso = true;
-            item_qt++;
-            break;
+    if(pos > 0 && !lista[pos].em_uso && !lista[pos - 1].em_uso) {
+        for(int i = 0; i < MAX_ITEMS; i++) {
+            if(!lista[i].em_uso) {
+                lista[i].cod = num;
+                lista[i].em_uso = true;
+                break;
+            }
         }
+    } else {
+        for(int i = MAX_ITEMS; i >= pos; i--) {
+            if(lista[i].em_uso && i != MAX_ITEMS)
+                lista[i + 1] = lista[i];
+        }
+
+        lista[pos].cod = num;
+        lista[pos].em_uso = true;
     }
+
+    item_qt++;
 
     exibe_mensagem(ITEM_INSERIDO);
     imprime_menu(false);
@@ -109,17 +129,21 @@ void remove_item() {
 
     if(!lista_tem_item()) return;
 
-    int item;
+    consulta_lista(false);
+
+    int i_item;
     printf("Informe qual item deseja remover: ");
-    scanf("%d", &item);
+    scanf("%d", &i_item);
 
-    if(!valida_item(item))
+    if(!valida_item(i_item) || !lista[i_item].em_uso) {
         exibe_mensagem(ITEM_INVALIDO);
+        return;
+    }
 
-    lista[item].em_uso = false;
+    lista[i_item].em_uso = false;
     item_qt--;
 
-    reorganiza_lista(item);
+    reorganiza_lista(i_item);
 }
 
 void reorganiza_lista(int item) {
@@ -131,7 +155,12 @@ bool valida_item(int item) {
 }
 
 bool pode_inserir_item() {
-    return item_qt < MAX_ITEMS;
+    if(item_qt == MAX_ITEMS) {
+        exibe_mensagem(LISTA_CHEIA);
+        return false;
+    }
+
+    return true;
 }
 
 bool lista_tem_item() {
@@ -153,28 +182,4 @@ void exibe_mensagem(int cod_msg) {
 void flush_stdin() {
     char c;
     while ((c = getchar()) != '\n' && c != EOF);
-}
-
-void exibe_valores(int duration, bool clear) {
-    int i;
-    for(i=MIN_ITEMS;i<MAX_ITEMS;i++){
-        printf("%d ", lista[i].cod);
-    }
-    printf("\n");
-    sleep(duration);
-    if(clear){
-    system("clear");
-    }
-}
-
-void exibe_uso(int duration, bool clear) {
-    int i;
-    for(i=MIN_ITEMS;i<MAX_ITEMS;i++){
-        printf("%d ", lista[i].em_uso);
-    }
-    printf("\n");
-    sleep(duration);
-    if(clear){
-    system("clear");
-    }
 }
