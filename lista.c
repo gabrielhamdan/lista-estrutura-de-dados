@@ -62,8 +62,7 @@ void pega_input_usuario() {
 
 void consulta_lista() {
     if(item_qt == 0) {
-        exibe_mensagem(LISTA_VAZIA
-        );
+        exibe_mensagem(LISTA_VAZIA);
         return;
     }
     
@@ -71,8 +70,8 @@ void consulta_lista() {
 
     // itera lista e imprime o que estiver em_uso
 
-    printf("Pressione qualquer tecla para retornar ao menu principal.");
-    flush_stdin(); // aguarda qualquer input do usuário antes de seguir executando o código
+    printf("Pressione ENTER para retornar ao menu principal.");
+    flush_stdin(); // aguarda input do usuário antes de seguir executando o código
 
     imprime_menu(false);
 }
