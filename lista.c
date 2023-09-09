@@ -11,7 +11,7 @@ void remove_item();
 void reorganiza_lista(int);
 bool valida_item(int);
 bool pode_inserir_item();
-void exibe_mensagem(int);
+bool lista_tem_item();
 void flush_stdin();
 void exibe_valores(int, bool);
 void exibe_uso(int, bool);
@@ -63,10 +63,7 @@ void pega_input_usuario() {
 }
 
 void consulta_lista() {
-    if(item_qt == 0) {
-        exibe_mensagem(LISTA_VAZIA);
-        return;
-    }
+    if(!lista_tem_item()) return;
     
     system("clear");
 
@@ -79,44 +76,38 @@ void consulta_lista() {
 }
 
 void insere_item() {
+    system("clear");
+
+    if(!pode_inserir_item()) {
+        exibe_mensagem(LISTA_CHEIA);
+        return;
+    }
+
     int num, pos;
-    printf("Informe o número a ser inserido. ");
+
+    printf("Informe o número a ser inserido: ");
     scanf("%d", &num);
+
     printf("\nInforme a posição a inserir o número: ");
     scanf("%d", &pos);
 
-    if(pode_inserir_item()){
-        if(!lista[pos].em_uso){
-            for(int j=0;j<MAX_ITEMS;j++){
-                if(!lista[j].em_uso){
-                    lista[j].cod=num;
-                    lista[j].em_uso=1;
-                    item_qt+=1;
-                    break;
-                }
-            }
+    for(int i = 0; i < MAX_ITEMS; i++) {
+        if(!lista[i].em_uso) {
+            lista[i].cod = num;
+            lista[i].em_uso = true;
+            item_qt++;
+            break;
+        }
+    }
 
-        }else{
-            for(int i=MAX_ITEMS;i>=(pos+1);i--){
-                if(lista[i-1].em_uso){
-                lista[i].cod = lista[i-1].cod;
-                lista[i].em_uso=true;
-                }
-            }
-            lista[pos].cod=num;
-            item_qt+=1;
-        }
-        }else{
-            exibe_mensagem(LISTA_CHEIA);
-        }
-    exibe_valores(0, false);
-    exibe_uso(2, true);
+    exibe_mensagem(ITEM_INSERIDO);
     imprime_menu(false);
-
 }
 
 void remove_item() {
     system("clear");
+
+    if(!lista_tem_item()) return;
 
     int item;
     printf("Informe qual item deseja remover: ");
@@ -143,6 +134,15 @@ bool pode_inserir_item() {
     return item_qt < MAX_ITEMS;
 }
 
+bool lista_tem_item() {
+    if(item_qt == 0) {
+        exibe_mensagem(LISTA_VAZIA);
+        return false;
+    }
+
+    return true;
+}
+
 void exibe_mensagem(int cod_msg) {
     system("clear");
     printf("%s\n", MENSAGEM[cod_msg]);
@@ -166,7 +166,6 @@ void exibe_valores(int duration, bool clear) {
     system("clear");
     }
 }
-
 
 void exibe_uso(int duration, bool clear) {
     int i;
