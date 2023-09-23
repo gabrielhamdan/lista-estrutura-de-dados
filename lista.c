@@ -144,10 +144,14 @@ void remove_item() {
     item_qt--;
 
     reorganiza_lista(i_item);
+    exibe_mensagem(ITEM_REMOVIDO);
 }
 
 void reorganiza_lista(int item) {
-
+    for(int i = item; i < MAX_ITEMS - 1; i++) {
+        lista[i] = lista[i + 1];
+        lista[i + 1].em_uso = false;
+    }
 }
 
 bool valida_item(int item) {
