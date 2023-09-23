@@ -92,30 +92,30 @@ void consulta_lista(bool retornaMenu) {
     imprime_menu(false);
 }
 
-void consulta_item(bool retornaMenu){
+void consulta_item(bool retornaMenu) {
     int pos;
     if(!lista_tem_item()) return;
     
     system("clear");
 
-    printf("Digite a posição a ser consultada:\n");
+    printf("Digite a posição a ser consultada: ");
     scanf("%d", &pos);
-    printf("\n");
+    flush_stdin();
     system("clear");
 
-    if(lista[pos].em_uso){
+    if(lista[pos].em_uso) {
         printf("%d. %d\n", pos, lista[pos].cod);
-    }else{
-        printf("Posição inválida.\n");
+    } else {
+        exibe_mensagem(POS_INVALIDA);
+        return;
     }
     
     if(!retornaMenu) return;
-    sleep(1.5);
-    //printf("Pressione ENTER para retornar ao menu principal.");
-    //flush_stdin(); // aguarda input do usuário antes de seguir executando o código
+
+    printf("Pressione ENTER para retornar ao menu principal.");
+    flush_stdin(); // aguarda input do usuário antes de seguir executando o código
 
     imprime_menu(false);
-
 }
 
 void insere_item() {
