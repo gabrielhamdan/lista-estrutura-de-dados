@@ -7,7 +7,7 @@
 #define MAX_ITEMS 14
 #define MENSAGEM ((char *[]){"Item inválido.", "A lista está cheia.", "A lista está vazia.", "Item inserido com sucesso.", "Item removido com sucesso"})
 
-enum OPCAO{CONSULTA_LISTA = 1, INSERE_ITEM, REMOVE_ITEM, SAIR};
+enum OPCAO{CONSULTA_LISTA = 1, CONSULTA_ITEM, INSERE_ITEM, REMOVE_ITEM, SAIR};
 enum COD_MENSAGEM{ITEM_INVALIDO, LISTA_CHEIA, LISTA_VAZIA, ITEM_INSERIDO, ITEM_REMOVIDO};
 
 typedef struct Lista

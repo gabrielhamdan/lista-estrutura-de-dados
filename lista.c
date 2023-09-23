@@ -16,6 +16,7 @@ bool lista_tem_item();
 void flush_stdin();
 void exibe_valores(int, bool);
 void exibe_uso(int, bool);
+void consulta_item(bool);
 
 Item lista[MAX_ITEMS];
 int usu_i, usu_cod, item_qt;
@@ -34,9 +35,10 @@ void imprime_menu(bool op_invalida) {
     printf("       LISTA       \n");
     printf("===================\n");
     printf(" 1. consultar lista\n");
-    printf(" 2. inserir item   \n");
-    printf(" 3. remover item   \n");
-    printf(" 4. sair           \n");
+    printf(" 2. consultar item \n");
+    printf(" 3. inserir item   \n");
+    printf(" 4. remover item   \n");
+    printf(" 5. sair           \n");
     if(op_invalida)
         printf("= opção  inválida =\n");
     else
@@ -52,6 +54,9 @@ void pega_input_usuario() {
     switch(usu_i) {
         case CONSULTA_LISTA:
             consulta_lista(true);
+            break;
+        case CONSULTA_ITEM:
+            consulta_item(true);
             break;
         case INSERE_ITEM:
             insere_item();
@@ -85,6 +90,32 @@ void consulta_lista(bool retornaMenu) {
     flush_stdin(); // aguarda input do usuário antes de seguir executando o código
 
     imprime_menu(false);
+}
+
+void consulta_item(bool retornaMenu){
+    int pos;
+    if(!lista_tem_item()) return;
+    
+    system("clear");
+
+    printf("Digite a posição a ser consultada:\n");
+    scanf("%d", &pos);
+    printf("\n");
+    system("clear");
+
+    if(lista[pos].em_uso){
+        printf("%d. %d\n", pos, lista[pos].cod);
+    }else{
+        printf("Posição inválida.\n");
+    }
+    
+    if(!retornaMenu) return;
+    sleep(1.5);
+    //printf("Pressione ENTER para retornar ao menu principal.");
+    //flush_stdin(); // aguarda input do usuário antes de seguir executando o código
+
+    imprime_menu(false);
+
 }
 
 void insere_item() {
